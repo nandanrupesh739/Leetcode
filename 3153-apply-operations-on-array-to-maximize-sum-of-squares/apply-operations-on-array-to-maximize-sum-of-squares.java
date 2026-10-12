@@ -3,32 +3,35 @@ import java.util.*;
 
 class Solution {
     public int maxSum(List<Integer> nums, int k) {
-        final int MOD = 1_000_000_007;
-        int[] bits = new int[31];
+        long mod = 1000000007;
+        int[] count = new int[31];
 
-        for (int num : nums) {
-            for (int b = 0; b < 31; b++) {
-                if ((num & (1 << b)) != 0) {
-                    bits[b]++;
+        for (int x : nums) {
+            int bit = 0;
+            while (x > 0) {
+                if ((x & 1) == 1) {
+                    count[bit]++;
                 }
+                x >>= 1;
+                bit++;
             }
         }
 
-        long ans = 0;
+        long result = 0;
 
-        for (int i = 0; i < k; i++) {
-            long num = 0;
+        while (k-- > 0) {
+            long value = 0;
 
-            for (int b = 30; b >= 0; b--) {
-                if (bits[b] > 0) {
-                    num |= (1L << b);
-                    bits[b]--;
+            for (int i = 30; i >= 0; i--) {
+                if (count[i] > 0) {
+                    value += (1L << i);
+                    count[i]--;
                 }
             }
 
-            ans = (ans + num * num) % MOD;
+            result = (result + value * value) % mod;
         }
 
-        return (int) ans;
+        return (int) result;
     }
 }
